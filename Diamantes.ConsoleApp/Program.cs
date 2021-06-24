@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace Diamantes.ConsoleApp
 {
     public class Program
     {
+        #region Dicionário contendo o alfabeto
         public static Dictionary<int, char> alfabeto = new Dictionary<int, char>
-            {
+        {
                 {1 ,'a'},
                 {2, 'b'},
                 {3, 'c'},
@@ -34,39 +34,28 @@ namespace Diamantes.ConsoleApp
                 {24, 'x'},
                 {25, 'y'},
                 {26, 'z'}
-            };
+        };
+        #endregion
+
+        public static int numeroEspacosFora;
+        public static int numeroEspacosDentro = -1;
 
         public static void Main(string[] args)
         {
             Console.Write("Digite uma letra: ");
             char letra = Convert.ToChar(Console.ReadLine());
 
-            int numeroEspacosFora = 0;
-            int numeroEspacosDentro = -1;
+            numeroEspacosFora = CalcularNumeroDeEspacosFora(letra);
 
-            foreach (KeyValuePair<int,char> item in alfabeto)
-                if (item.Value == letra)
-                    numeroEspacosFora = item.Key;
+            ExibirParteSuperior();
 
-            // escrevendo a primeira parte
-            for (int i = 1; i <= numeroEspacosFora; i++)
-            {
-                for (int j = numeroEspacosFora - i; j > 0; j--)                                    
-                    Console.Write(" ");
-                
-                Console.Write(alfabeto[i].ToString().ToUpper());
+            ExibirParteInferior();
 
-                for (int k = 0;  k < numeroEspacosDentro; k++)
-                    Console.Write(" ");
+            Console.ReadLine();
+        }
 
-                if (i != 1)
-                   Console.Write(alfabeto[i].ToString().ToUpper());
-
-                Console.WriteLine();
-                numeroEspacosDentro += 2;
-            }
-
-            // escrevendo invertido
+        private static void ExibirParteInferior()
+        {
             for (int i = numeroEspacosFora - 1; i >= 1; i--)
             {
                 for (int j = numeroEspacosFora - i; j > 0; j--)
@@ -74,8 +63,7 @@ namespace Diamantes.ConsoleApp
 
                 Console.Write(alfabeto[i].ToString().ToUpper());
 
-
-                for (int k = numeroEspacosDentro - 4; k > 0 ; k--)
+                for (int k = numeroEspacosDentro - 4; k > 0; k--)
                     Console.Write(" ");
 
                 if (i != 1)
@@ -84,8 +72,37 @@ namespace Diamantes.ConsoleApp
                 Console.WriteLine();
                 numeroEspacosDentro -= 2;
             }
+        }
 
-            Console.ReadLine();
+        private static void ExibirParteSuperior()
+        {
+            for (int i = 1; i <= numeroEspacosFora; i++)
+            {
+                for (int j = numeroEspacosFora - i; j > 0; j--)
+                    Console.Write(" ");
+
+                Console.Write(alfabeto[i].ToString().ToUpper());
+
+                for (int k = 0; k < numeroEspacosDentro; k++)
+                    Console.Write(" ");
+
+                if (i != 1)
+                    Console.Write(alfabeto[i].ToString().ToUpper());
+
+                Console.WriteLine();
+                numeroEspacosDentro += 2;
+            }
+        }
+
+        private static int CalcularNumeroDeEspacosFora(char letra)
+        {
+            int numeroEspacosFora = 0;
+
+            foreach (KeyValuePair<int, char> item in alfabeto)
+                if (item.Value == letra)
+                    numeroEspacosFora = item.Key;
+
+            return numeroEspacosFora;
         }
     }
 }
